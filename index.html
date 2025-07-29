@@ -1,0 +1,434 @@
+
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>MetaAnimator</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- <base href="/"> -->
+
+        <!--FACEBOOK-->
+    <meta property="og:image" content="">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="682">
+    <meta property="og:image:height" content="682">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content=""/>
+    <meta property="og:title" content="FreeAnimate" />
+    <meta property="og:description" content="Project page for FreeAnimate" />
+
+        <!--TWITTER-->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="FreeAnimate" />
+    <meta name="twitter:description" content="Project page for FreeAnimate." />
+    <meta name="twitter:image" content="" />
+
+
+    <!--<link rel="apple-touch-icon" href="apple-touch-icon.png"> -->
+    <!-- <link rel="icon" type="image/png" href="img/seal_icon.png"> -->
+    <!-- Place favicon.ico in the root directory -->
+
+    <script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.css">
+    <link rel="stylesheet" href="css/app.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.8.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+    
+    <script src="js/app.js"></script>
+
+
+    <style>
+        .github-pill {
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-weight: 500;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            background-color: #000;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .github-pill:hover {
+            background-color: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <br>
+    <div class="container" id="main" style="width: 85%;">
+    <!-- <div class="container" id="main"> -->
+        <div class="row">
+            <h2 class="col-md-12 text-center">
+                <b>Meta-Animator</b>: Meta-Learning-Driven Human Image Animation with Text-Guided Identity Preservation</br>
+            </h2>
+        </div>
+        <!-- Make sure you include Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <ul class="list-inline">
+                    <li>
+                        <a class="btn btn-dark github-pill" href="https://github.com/yourusername/meta-animator" target="_blank" role="button">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        
+        <div class="row">
+            <!-- 左侧文本部分 -->
+            <div class="col-md-4 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    Abstract
+                </h3>
+                <p class="text-justify">
+                    Human image animation aims to animate a reference image according to a driving pose sequence, but achieving high-fidelity and temporally coherent results remains challenging, especially under limited data conditions. Existing diffusion-based methods often require large-scale training resources and extensive tuning to generalize across diverse identities and motions. In this paper, we propose Meta-Animator, a novel framework for human image animation that unifies meta-learning with multi-condition guided latent diffusion. Meta-Animator introduces a compact reference identifier mechanism to encode identity information and employs a collection of condition-specific tasks, termed Meta-Tasks, to efficiently guide the model in learning both foreground and background dynamics. We further design a flexible training pipeline that combines large-scale image pre-training with lightweight few-shot fine-tuning, enabling the model to generalize to unseen subjects with as few as five reference images. Comprehensive experiments demonstrate that Meta-Animator achieves competitive image and video quality with significantly fewer training resources compared to existing methods. Our findings suggest that integrating meta-learning with conditional diffusion provides a scalable and data-efficient solution for subject-driven video generation.
+                </p>
+            </div>
+        
+            <!-- 右侧图像部分 -->
+            <div class="col-md-4 col-md-offset-0 text-center" style="margin-top: 30px;">
+                <img width="95%" src="assets/teaser.png" class="img-responsive" alt="preview_generation">
+                <p style="margin-top: 10px; font-size: 14px; color: #555; text-align: left;">
+                    <strong>Figure 1:</strong> The fine-tuning and inference pipeline of Meta-Animator. With a small reference set (typically 5 images of the same identity), Meta-Animator fine-tunes the model by assigning a unique reference identifier to each reference identity, establishing an implicit mapping in parameter space. During inference, the model generates animations of the reference identity by conditioning on a pose map and a text prompt containing the trained reference identifier.
+                </p>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    A. Network Architecture
+                </h3>
+                <p class="text-justify">
+                    The architecture of Meta-Animator adopts the pretrained components from a stable latent diffusion model, including the Denoising U-Net, VAE, and CLIP Text Encoder. To support multitask learning, we introduce <em>Meta ControlNet</em>, which integrates task-specific LoRA modules. During training, each batch focuses on a single task with the corresponding LoRA dynamically loaded into the network. The model iterates through all tasks in cycles, enabling efficient adaptation across varied animation conditions.</p>
+                </p>
+
+                <br>
+                <img width="90%" src="assets/pipeline.png" class="img-responsive" alt="pipeline" style="margin:auto">
+                <p style="margin-top: 10px; font-size: 14px; color: #555; text-align: left;">
+                    <strong>Figure 2:</strong> The proposed Meta-Animator framework. Meta-Animator integrates Meta ControlNet, which leverages condition-specific LoRAs to enable multi-task learning within a single model. During training, each batch is assigned a specific task, with the corresponding LoRA dynamically integrated into ControlNet for gradient computation and parameter updates. The process iterates across tasks, allowing the model to learn diverse conditions simultaneously.
+                </p>
+                <br>
+
+                <div style="margin-left: 40px;">
+                    <h4 style="font-weight: bold;">(1) Exclusion of ReferenceNet.</h4>
+                    <p class="text-justify">
+                        Unlike conventional human image animation frameworks, Meta-Animator eliminates the need for a dedicated ReferenceNet. Traditionally, this module injects fine-grained features via an additional U-Net, increasing training and inference costs. Meta-Animator instead encodes reference image information implicitly using meta-learning and task-specific reference identifiers, allowing efficient retrieval without requiring extra modules or heavy computation.</p>
+                    </p>
+                </div>
+        
+                <div style="margin-left: 40px;">
+                    <h4 style="font-weight: bold;">(2) Retention of CLIP Text Encoder.</h4>
+                    <p class="text-justify">
+                        While many existing methods replace the CLIP text encoder with image encoders to ingest reference photos, Meta-Animator retains the original text-based encoder. This design choice maintains compatibility with the pretrained U-Net and avoids the need for extensive retraining. By associating visual identity with a unique textual identifier, our method enables effective animation while preserving both high-level semantics and training efficiency.</p>
+                    </p>
+                </div>
+                
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    B. Meta-Tasks for Structured Feature Learning
+                </h3> 
+                <p class="text-justify">
+                    To improve identity consistency and feature learning efficiency, Meta-Animator introduces <strong>Meta-Tasks</strong> — a set of diverse, purpose-driven training objectives designed for cross-task generalization. These tasks help the model both memorize identity features and generalize across complex motions and scenes.
+                </p>
+                <p class="text-justify">
+                    Meta-Tasks are grouped into three categories:
+                    <ul>
+                        <li><strong>Foreground Learning Tasks (FLTs):</strong> Focused on capturing identity-relevant details such as pose, depth, and surface normals. They include guides like DWPose, segmentation maps, and hand-aware signals like HaMeR.</li>
+                        <li><strong>Background Learning Tasks (BLTs):</strong> Enhance stability in background generation under dynamic foregrounds, primarily through background outpainting.</li>
+                        <li><strong>Global Learning Tasks (GLTs):</strong> Improve the model’s understanding of overall scene layout via Canny and blur-based guidance.</li>
+                    </ul>
+                </p>
+                <p class="text-justify">
+                    Each task corresponds to a condition-specific LoRA module that can be activated or deactivated flexibly. The default setup includes nine tasks. Additional tasks can be integrated to enhance animation quality, though the relationship between task count and performance is non-linear. Ablation studies validate the impact of different task configurations.
+                </p>
+                <br>
+                <img width="90%" src="assets/Meta-Tasks.png" class="img-responsive" alt="pipeline" style="margin:auto">
+                <p style="margin-top: 10px; font-size: 14px; color: #555; text-align: left;">
+                    <strong>Figure 3:</strong> Representative examples for the Meta-Tasks.                
+                </p>
+                <br>
+            </div>
+        </div>
+
+
+        <div class="row"> 
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    C. Dual Space Hybrid Loss
+                </h3>
+                <p class="text-justify">
+                Most latent diffusion models operate in latent space for efficiency, which works well for tasks focused on high-level semantics. However, human image animation demands precise identity preservation — a challenge for latent-only loss. To improve detail fidelity, we propose the <strong>Dual Space Hybrid Loss (DSH Loss)</strong>, which jointly supervises both latent and image spaces.
+                </p>
+                <p class="text-justify">
+                After half an epoch, DSH Loss replaces the original MSE loss and is applied selectively when the timestep is between 0 and 124, where the denoised output is closer to the ground truth and image-space loss becomes more meaningful.
+                </p>
+                <p class="text-justify">
+                The total loss is computed as:
+                </p>
+                <!-- Equation: DSH Loss -->
+                <div class="text-center">
+                \[
+                \mathcal{L}_{\text{DSH}} = \mathcal{L}_{\text{latent}} + \lambda \cdot \mathcal{L}_{\text{image}}
+                \]
+                </div>
+                <p class="text-justify">
+                The latent-space loss is defined as:
+                </p>
+                <div class="text-center">
+                \[
+                \mathcal{L}_{\text{latent}} = \mathbb{E}_{\mathcal{E}(\boldsymbol{x}), c, \epsilon \sim \mathcal{N}(0, 1), t}\left[\left\|\epsilon - \epsilon_{\theta}\left(\boldsymbol{z_t}, t, c\right)\right\|_{2}^{2}\right]
+                \]
+                </div>
+                <p class="text-justify">
+                The image-space loss includes a denoising loss and a face similarity term:
+                </p>
+                <div class="text-center">
+                \[
+                \mathcal{L}_{\text{image}} = \mathbb{E}_{x, c, \epsilon \sim \mathcal{N}(0,1), t} \left[ \left\| \epsilon - \epsilon_\theta(x_t, t, c) \right\|_2^2 \right] + \mathcal{L}_{\text{face}}
+                \]
+                </div>
+                <p class="text-justify">
+                To enhance facial consistency, we compute a cosine similarity between face embeddings extracted from predicted and ground-truth images using ArcFace:
+                </p>
+                <div class="text-center">
+                \[
+                \mathcal{L}_{\text{face}} = 1 - \frac{e_{\text{gt}} \cdot e_{\text{pred}}}{\|e_{\text{gt}}\|_2 \|e_{\text{pred}}\|_2}
+                \]
+                </div>
+                <p class="text-justify">
+                By jointly optimizing DSH Loss, the model balances structural accuracy in latent space with fine-grained fidelity in image space — especially for preserving identity-critical facial regions.
+                </p>
+            </div>
+        </div>
+        
+
+        <div class="row"> 
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    D. Training Strategy and Inference Pipeline
+                </h3>
+
+                <br>
+                <img width="50%" src="assets/training_strategy.png" class="img-responsive" alt="pipeline" style="margin:auto">
+                <p style="margin-top: 10px; font-size: 14px; color: #555; text-align: left;">
+                    <strong>Figure 4:</strong> Training strategy and inference pipeline.
+                </p>
+                <br>
+        
+                <p class="text-justify">
+                Our training pipeline consists of three stages, each designed to progressively improve task generalization, motion modeling, and subject-specific adaptation. The full structure is shown in Figure 3.
+                </p>
+        
+                <p class="text-justify">
+                <strong>Stage 1: Image Pre-training.</strong><br>
+                The model is first trained on independent video frames using a variety of Meta-Tasks. This stage establishes a mapping between reference identifiers and visual features, helping the model learn to encode identity information. Only the ControlNet and condition-specific LoRAs are optimized, totaling approximately 589M trainable parameters.
+                </p>
+        
+                <p class="text-justify">
+                <strong>Stage 2: Temporal Learning.</strong><br>
+                We introduce video clips and optimize the motion module to capture temporal dynamics. To avoid overfitting, only the LoRA from the DWPose task is retained as trainable; all other components are frozen. This stage has about 417M trainable parameters.
+                </p>
+        
+                <p class="text-justify">
+                <strong>Stage 3: Few-shot Fine-tuning.</strong><br>
+                Given a small reference set of <code>K</code> images, the model is fine-tuned using all Meta-Tasks. To prevent overfitting and maintain LoRA generalization, we also incorporate 20 auxiliary reference sets from the Stage 2 video data. This step takes roughly 10 minutes on a single NVIDIA L20 GPU.
+                During this fine-tuning stage, the motion module is temporarily removed, and the model structure reverts to that of Stage 1.
+                </p>
+        
+                <p class="text-justify">
+                <strong>Inference.</strong><br>
+                At test time, only the DWPose LoRA and the trained motion module are active. The initial noise is obtained via DDIM inversion of the first reference frame, ensuring temporal coherence across the generated animation.
+                </p>
+        
+                <p class="text-justify">
+                Notably, Meta-Animator achieves high-quality human image animation using just a few reference images—without requiring a ReferenceNet or retraining the U-Net.
+                </p>
+            </div>
+        </div>
+
+
+        
+
+
+        <div class="row"> 
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;">
+                    Comparisions with Existed Approaches
+                </h3>
+                <p class="text-justify">
+                    We compare <strong>Meta-Animator</strong> with several state-of-the-art human image animation methods, 
+                    including <em>AnimateAnyone</em>, <em>Champ</em>, <em>MimicMotion</em>, and <em>StableAnimator</em>. 
+                    As shown in the following video comparisons, Meta-Animator delivers animation quality on par with leading methods.
+                </p>
+                <div class="row">
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/TikTok/TikTok-1.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/TikTok/TikTok-2.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/TikTok/TikTok-3.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/TikTok/TikTok-4.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/TikTok/TikTok-5.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/Unseen/DanceIt-1.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/Unseen/DanceIt-3.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+                <video id="comparison-video" width="100%" autoplay loop muted controls>
+                    <source src="assets/videos/Comparisions_videos/Unseen/DanceIt-4.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3 style="font-weight: bold;"> 
+                    Animation Results
+                </h3>
+                <p class="text-justify">
+                    We further present animation results generated by Meta-Animator on data outside the TikTok dataset. These examples demonstrate that our method produces high-quality animations while effectively preserving the identity of the reference subject.
+                    (Note: All results were obtained via fine-tuning on 5 reference images. For visualization clarity, only one reference image is shown here.)
+                </p>
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <table border="0" cellspacing="0" cellpadding="0" align="center" style="width: 100%;">
+                        <tr>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_1.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_2.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <table border="0" cellspacing="0" cellpadding="0" align="center" style="width: 100%;">
+                        <tr>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_3.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_5.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <table border="0" cellspacing="0" cellpadding="0" align="center" style="width: 100%;">
+                        <tr>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_6.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_7.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                
+                <div class="row">
+                    <div class="col-md-6"></div>
+                    <table border="0" cellspacing="0" cellpadding="0" align="center" style="width: 100%;">
+                        <tr>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_8.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                            <td align="center" valign="middle" width="48%">
+                                <video id="v0" width="99%" autoplay loop muted controls>
+                                    <source src="assets/videos/Animation_videos/video_9.mp4" type="video/mp4" />
+                                </video>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <h3>
+                    Acknowledgements
+                </h3>
+                <p class="text-justify">
+                The website template was borrowed from <a href="http://mgharbi.com/">Michaël Gharbi</a> and <a href="https://jonbarron.info/mipnerf/">Mip-NeRF</a>.
+                </p>
+            </div>
+        </div>
+
+    </div>  
+    <br><br><br>
+</body>
+</html>
