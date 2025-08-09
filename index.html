@@ -118,7 +118,8 @@
             <div class="col-md-4 col-md-offset-0 text-center" style="margin-top: 30px;">
                 <img width="95%" src="assets/teaser.png" class="img-responsive" alt="preview_generation">
                 <p style="margin-top: 10px; font-size: 14px; color: #555; text-align: left;">
-                    <strong>Figure 1:</strong> The fine-tuning and inference pipeline of Meta-Animator. With a small reference set (typically 5 images of the same identity), Meta-Animator fine-tunes the model by assigning a unique reference identifier to each reference identity, establishing an implicit mapping in parameter space. During inference, the model generates animations of the reference identity by conditioning on a pose map and a text prompt containing the trained reference identifier.
+                    <strong>Figure 1:</strong> Comparison of inference pipelines. Top: Prior methods such as AnimateAnyone and StableAnimator typically replace the text encoder with an image encoder, and introduce an additional reference feature extractor (e.g., ReferenceNet in AnimateAnyone, VAE Encoder in StableAnimator) to capture fine-grained identity details. Moreover, they require retraining the denoising model, increasing computational cost and complexity.
+    Bottom: Meta-Animator pipeline retains the original SD text encoder and denoising model without modification. By leveraging a lightweight LoRA module with the pose encoder and conditioning generation via learned reference identifiers in text prompts, our approach achieves efficient and adaptable animation.
                 </p>
             </div>
         </div>
